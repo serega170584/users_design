@@ -8,16 +8,16 @@ use User\Dto\User;
 use User\EntityManager\EntityManagerInterface;
 use User\Logger\LoggerInterface;
 use User\Repository\UserInterface;
-use User\Validator\Creator;
+use User\Validator\UserValidator;
 
 class UseCase
 {
     public function __construct(
-        readonly Creator $creatorValidator,
-        readonly LoggerInterface $logger,
+        readonly UserValidator          $creatorValidator,
+        readonly LoggerInterface        $logger,
         readonly EntityManagerInterface $entityManager,
-        readonly UserInterface $userRepository,
-        public ?string  $notes,
+        readonly UserInterface          $userRepository,
+        public ?string                  $notes,
     ) {}
     public function create(User $user): ?int {
         try {
