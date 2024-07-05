@@ -43,5 +43,9 @@ class UserValidator
         if (filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
             throw new \Exception('Email is not valid');
         }
+
+        if ($this->userRepository->find(['email' => $user->email]) !== null) {
+            throw new \Exception('Email is not unique');
+        }
     }
 }
