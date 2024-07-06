@@ -76,6 +76,32 @@ class UseCase
         return true;
     }
 
+    /**
+     * @return DbUser[]|null
+     */
+    public function getList(): ?array
+    {
+        $users = [];
+
+        try {
+            $dbUsers = $this->userRepository->findAll(['deleted' => null]);
+            foreach ($dbUsers as $dbUser) {
+                $user = new User(
+                    $dbUser->getId(),
+                    $dbUser->getName(),
+                    $dbUser->getEmail(),
+                    $dbUser->getNotes(),
+                );
+                $users[] = $user;
+            }
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+            return null;
+        }
+
+        return $users;
+    }
+
     private function createUserEntity(User $user): DbUser
     {
         $dbUser = new DbUser();
