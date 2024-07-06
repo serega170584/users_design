@@ -8,5 +8,5 @@ use User\Entity\User;
 
 interface EntityManagerInterface
 {
-    public function update(User $user);
+    public function update(User $user): void;
 }
