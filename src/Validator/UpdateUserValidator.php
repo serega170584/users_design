@@ -37,7 +37,7 @@ class UpdateUserValidator
             throw new \Exception('Only not empty id is permitted for update');
         }
 
-        if ($this->userRepository->findById($user->id) !== null) {
+        if ($this->userRepository->findById($user->id) === null) {
             throw new \Exception(sprintf('User with id %s is not existed', $user->id));
         }
 
