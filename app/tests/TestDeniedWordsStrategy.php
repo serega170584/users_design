@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace User;
+namespace Tests;
 
 use User\Validator\DeniedWordsStrategyInterface;
 

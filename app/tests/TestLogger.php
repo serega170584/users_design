@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace tests;
+namespace Tests;
 
 use User\Logger\LoggerInterface;
 

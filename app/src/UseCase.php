@@ -15,13 +15,13 @@ use User\Validator\UpdateUserValidator;
 
 class UseCase
 {
-    private const string USER_CREATE_MARK = 'User create';
-    private const string USER_UPDATE_MARK = 'User update';
-    private const string USER_DELETE_MARK = 'User delete';
-    private const string USERS_LIST_MARK = 'Users list';
+    private const USER_CREATE_MARK = 'User create';
+    private const USER_UPDATE_MARK = 'User update';
+    private const USER_DELETE_MARK = 'User delete';
+    private const USERS_LIST_MARK = 'Users list';
 
-    private const string EXCEPTION_PARAM_NAME = 'exception';
-    private const string ID_PARAM_NAME = 'id';
+    private const EXCEPTION_PARAM_NAME = 'exception';
+    private const ID_PARAM_NAME = 'id';
 
     private CreateUserValidator $createUserValidator;
     private UpdateUserValidator $updateUserValidator;
@@ -47,6 +47,7 @@ class UseCase
     }
     public function create(User $user): ?int {
         try {
+
             $this->createUserValidator->validate($user);
 
             $dbUser = $this->createUserEntity($user);

@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace User;
 
 use PHPUnit\Framework\TestCase;
-use tests\TestAllowedDomainsStrategy;
-use tests\TestLogger;
+use Tests\TestAllowedDomainsStrategy;
+use Tests\TestDeniedWordsStrategy;
+use Tests\TestEntityManager;
+use Tests\TestLogger;
+use Tests\TestUserRepository;
 use User\Dto\User;
 use User\Validator\CreateUserValidator;
 use User\Validator\DeleteUserValidator;
@@ -50,5 +53,7 @@ class UseCaseTest extends TestCase
             $em,
             $repository,
         );
+
+        $this->assertNull($useCase->create($user));
     }
 }

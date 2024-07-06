@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace User;
+namespace Tests;
 
 use User\Entity\User as DbUser;
 use User\Repository\UserInterface;
