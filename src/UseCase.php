@@ -62,6 +62,20 @@ class UseCase
         }
     }
 
+    public function delete(int $id): bool
+    {
+        try {
+            $dbUser = $this->userRepository->findById($id);
+            $dbUser->setDeleted(new \DateTimeImmutable());
+            $this->entityManager->update($dbUser);
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
     private function createUserEntity(User $user): DbUser
     {
         $dbUser = new DbUser();

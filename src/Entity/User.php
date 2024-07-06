@@ -12,6 +12,7 @@ class User
     private \DateTimeImmutable $created;
     private ?\DateTimeImmutable $deleted;
     private ?string $notes;
+
     public function getId(): int
     {
         return $this->id;
@@ -64,8 +65,15 @@ class User
         return $this->deleted;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function setDeleted(?\DateTimeImmutable $deleted): void
     {
+        if ($this->deleted < $this->created) {
+            throw new \Exception(sprintf('Deleted field can not be more than created field for user %s', $this->id));
+        }
+
         $this->deleted = $deleted;
     }
 
