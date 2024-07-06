@@ -6,7 +6,8 @@ namespace User\Logger;
 
 interface LoggerInterface
 {
-    function error(string $message);
-    function info(string $message);
-    function warn(string $message);
+    function critical(string $message, array $context = []);
+    function error(string $message, array $context = []);
+    function info(string $message, array $context = []);
+    function warn(string $message, array $context = []);
 }

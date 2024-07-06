@@ -15,6 +15,14 @@ use User\Validator\UpdateUserValidator;
 
 class UseCase
 {
+    private const USER_CREATE_MARK = 'User create';
+    private const USER_UPDATE_MARK = 'User update';
+    private const USER_DELETE_MARK = 'User delete';
+    private const USERS_LIST_MARK = 'Users list';
+
+    private const EXCEPTION_PARAM_NAME = 'exception';
+    private const ID_PARAM_NAME = 'id';
+
     public function __construct(
         private CreateUserValidator     $createUserValidator,
         private UpdateUserValidator     $updateUserValidator,
@@ -29,15 +37,17 @@ class UseCase
 
             $dbUser = $this->createUserEntity($user);
 
-            $this->logger->info("Database user create start");
+            $this->logger->info(sprintf('[%s] database user create start', self::USER_CREATE_MARK));
 
             $this->entityManager->update($dbUser);
 
-            $this->logger->info("Database user create start");
+            $this->logger->info(sprintf('[%s] database user create finish', self::USER_CREATE_MARK));
 
             return $dbUser->getId();
         } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
+            $this->logger->error(sprintf('[%s]', self::USER_CREATE_MARK), [
+                self::EXCEPTION_PARAM_NAME => $e,
+            ]);
 
             return null;
         }
@@ -49,15 +59,18 @@ class UseCase
 
             $dbUser = $this->updateUserEntity($user);
 
-            $this->logger->info("Database user update start");
+            $this->logger->info(sprintf('[%s] database user update start', self::USER_UPDATE_MARK));
 
             $this->entityManager->update($dbUser);
 
-            $this->logger->info("Database user create start");
+            $this->logger->info(sprintf('[%s] database user create finish', self::USER_UPDATE_MARK));
 
             return true;
         } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
+            $this->logger->error(sprintf('[%s]', self::USER_UPDATE_MARK), [
+                self::EXCEPTION_PARAM_NAME => $e,
+                self::ID_PARAM_NAME => $user->id,
+            ]);
 
             return false;
         }
@@ -74,9 +87,17 @@ class UseCase
 
             $dbUser->setDeleted(new \DateTimeImmutable());
 
+            $this->logger->info(sprintf('[%s] database user delete start', self::USER_DELETE_MARK));
+
             $this->entityManager->update($dbUser);
+
+            $this->logger->info(sprintf('[%s] database user delete finish', self::USER_DELETE_MARK));
         } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
+            $this->logger->error(sprintf('[%s]', self::USER_DELETE_MARK), [
+                self::EXCEPTION_PARAM_NAME => $e,
+                self::ID_PARAM_NAME => $id,
+            ]);
+
             return false;
         }
 
@@ -91,6 +112,8 @@ class UseCase
         $users = [];
 
         try {
+            $this->logger->info(sprintf('[%s] database users list start', self::USERS_LIST_MARK));
+
             $dbUsers = $this->userRepository->findAll(['deleted' => null]);
             foreach ($dbUsers as $dbUser) {
                 $user = new User(
@@ -101,8 +124,13 @@ class UseCase
                 );
                 $users[] = $user;
             }
+
+            $this->logger->info(sprintf('[%s] database users list finish', self::USERS_LIST_MARK));
         } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
+            $this->logger->error(sprintf('%s]', self::USERS_LIST_MARK), [
+                self::EXCEPTION_PARAM_NAME => $e,
+            ]);
+
             return null;
         }
 
