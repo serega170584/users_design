@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace User;
 
 use User\Dto\User;
-use \User\Entity\User as DbUser;
+use User\Entity\User as DbUser;
 use User\EntityManager\EntityManagerInterface;
 use User\Logger\LoggerInterface;
 use User\Repository\UserInterface;
