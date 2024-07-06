@@ -11,7 +11,6 @@ use User\Logger\LoggerInterface;
 use User\Repository\UserInterface;
 use User\Validator\CreateUserValidator;
 use User\Validator\UpdateUserValidator;
-use User\Validator\UserValidatorTrait;
 
 class UseCase
 {
@@ -47,7 +46,7 @@ class UseCase
         try {
             $this->updateUserValidator->validate($user);
 
-            $dbUser = $this->createUserEntity($user);
+            $dbUser = $this->updateUserEntity($user);
 
             $this->logger->info("Database user update start");
 
