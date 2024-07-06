@@ -23,14 +23,28 @@ class UseCase
     private const string EXCEPTION_PARAM_NAME = 'exception';
     private const string ID_PARAM_NAME = 'id';
 
+    private CreateUserValidator $createUserValidator;
+    private UpdateUserValidator $updateUserValidator;
+    private DeleteUserValidator $deleteUserValidator;
+    private LoggerInterface $logger;
+    private EntityManagerInterface $entityManager;
+    private UserInterface $userRepository;
+
     public function __construct(
-        private CreateUserValidator     $createUserValidator,
-        private UpdateUserValidator     $updateUserValidator,
-        private DeleteUserValidator $deleteUserValidator,
-        private LoggerInterface        $logger,
-        private EntityManagerInterface $entityManager,
-        private UserInterface          $userRepository,
-    ) {}
+        CreateUserValidator     $createUserValidator,
+        UpdateUserValidator     $updateUserValidator,
+        DeleteUserValidator $deleteUserValidator,
+        LoggerInterface        $logger,
+        EntityManagerInterface $entityManager,
+        UserInterface          $userRepository,
+    ) {
+        $this->createUserValidator = $createUserValidator;
+        $this->updateUserValidator = $updateUserValidator;
+        $this->deleteUserValidator = $deleteUserValidator;
+        $this->logger = $logger;
+        $this->entityManager = $entityManager;
+        $this->userRepository = $userRepository;
+    }
     public function create(User $user): ?int {
         try {
             $this->createUserValidator->validate($user);
