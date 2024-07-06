@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace User\Entity;
 
+use User\Exception\IdRedefineIsNotPermittedException;
+
 class User
 {
     private ?int $id;
@@ -24,7 +26,7 @@ class User
     public function setId(?int $id): void
     {
         if ($this->id !== null) {
-            throw new \Exception('Id redefine is not permitted');
+            throw new IdRedefineIsNotPermittedException();
         }
 
         $this->id = $id;
@@ -70,10 +72,6 @@ class User
      */
     public function setDeleted(?\DateTimeImmutable $deleted): void
     {
-        if ($this->deleted < $this->created) {
-            throw new \Exception(sprintf('Deleted field can not be more than created field for user %s', $this->id));
-        }
-
         $this->deleted = $deleted;
     }
 

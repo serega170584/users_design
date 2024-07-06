@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace User\Validator;
 
 use User\Dto\User;
+use User\Exception\OnlyEmptyIdIsPermittedForCreateException;
 use User\Repository\UserInterface;
 
 class CreateUserValidator
@@ -34,7 +35,7 @@ class CreateUserValidator
     public function validate(User $user): void
     {
         if ($user->id !== null) {
-            throw new \Exception('Only empty id is permitted for create');
+            throw new OnlyEmptyIdIsPermittedForCreateException();
         }
 
         $this->validateUser(

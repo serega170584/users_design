@@ -10,17 +10,18 @@ use User\EntityManager\EntityManagerInterface;
 use User\Logger\LoggerInterface;
 use User\Repository\UserInterface;
 use User\Validator\CreateUserValidator;
+use User\Validator\DeleteUserValidator;
 use User\Validator\UpdateUserValidator;
 
 class UseCase
 {
     public function __construct(
-        readonly CreateUserValidator     $createUserValidator,
-        readonly UpdateUserValidator     $updateUserValidator,
-        readonly LoggerInterface        $logger,
-        readonly EntityManagerInterface $entityManager,
-        readonly UserInterface          $userRepository,
-        public ?string                  $notes,
+        private CreateUserValidator     $createUserValidator,
+        private UpdateUserValidator     $updateUserValidator,
+        private DeleteUserValidator $deleteUserValidator,
+        private LoggerInterface        $logger,
+        private EntityManagerInterface $entityManager,
+        private UserInterface          $userRepository,
     ) {}
     public function create(User $user): ?int {
         try {
@@ -65,8 +66,14 @@ class UseCase
     public function delete(int $id): bool
     {
         try {
+            $date = new \DateTimeImmutable();
+
             $dbUser = $this->userRepository->findById($id);
+
+            $this->deleteUserValidator->validate($id, $date);
+
             $dbUser->setDeleted(new \DateTimeImmutable());
+
             $this->entityManager->update($dbUser);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());

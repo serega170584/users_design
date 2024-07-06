@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace User\Validator;
 
 use User\Dto\User;
+use User\Exception\OnlyNotEmptyIdIsPermittedForUpdateException;
+use User\Exception\UserIsNotExistedException;
 use User\Repository\UserInterface;
 
 class UpdateUserValidator
@@ -34,11 +36,11 @@ class UpdateUserValidator
     public function validate(User $user): void
     {
         if ($user->id === null) {
-            throw new \Exception('Only not empty id is permitted for update');
+            throw new OnlyNotEmptyIdIsPermittedForUpdateException();
         }
 
         if ($this->userRepository->findById($user->id) === null) {
-            throw new \Exception(sprintf('User with id %s is not existed', $user->id));
+            throw new UserIsNotExistedException();
         }
 
         $this->validateUser(

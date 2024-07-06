@@ -5,6 +5,13 @@ declare(strict_types=1);
 namespace User\Validator;
 
 use User\Dto\User;
+use User\Exception\EmailDomainIsNotAllowedException;
+use User\Exception\EmailIsNotUniqueException;
+use User\Exception\EmailIsNotValidException;
+use User\Exception\NameIsNotUniqueException;
+use User\Exception\TooShortNameException;
+use User\Exception\WordIsDeniedException;
+use User\Exception\WrongSymbolsException;
 use User\Repository\UserInterface;
 
 trait UserValidatorTrait
@@ -20,15 +27,15 @@ trait UserValidatorTrait
     ): void
     {
         if (!preg_match("#^[a-z0-9]+$#", $user->name)) {
-            throw new \Exception('Wrong symbols in name');
+            throw new WrongSymbolsException();
         }
 
         if (strlen($user->name) < 8) {
-            throw new \Exception('Too short name');
+            throw new TooShortNameException();
         }
 
         if (!$deniedWordsStrategy->isValid($user->name)) {
-            throw new \Exception('Word is denied');
+            throw new WordIsDeniedException();
         }
 
         if ($userRepository->find(
@@ -37,11 +44,11 @@ trait UserValidatorTrait
                     '!id' => $user->id,
                 ]
             ) !== null) {
-            throw new \Exception('Name is not unique');
+            throw new NameIsNotUniqueException();
         }
 
         if (filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
-            throw new \Exception('Email is not valid');
+            throw new EmailIsNotValidException();
         }
 
         if ($userRepository->find(
@@ -50,11 +57,11 @@ trait UserValidatorTrait
                     '!id' => $user->id
                 ]
             ) !== null) {
-            throw new \Exception('Email is not unique');
+            throw new EmailIsNotUniqueException();
         }
 
         if (!$allowedDomainsStrategy->isValid($user->email)) {
-            throw new \Exception('Email domain is not allowed');
+            throw new EmailDomainIsNotAllowedException();
         }
     }
 }
