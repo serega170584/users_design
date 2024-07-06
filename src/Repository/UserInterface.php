@@ -9,7 +9,6 @@ use User\Entity\User as DbUser;
 
 interface UserInterface
 {
-    function create(User $user): DbUser;
     function findById(int $id): ?DbUser;
 
     function find(array $filter): ?DbUser;

@@ -6,7 +6,7 @@ namespace User\Entity;
 
 class User
 {
-    private int $id;
+    private ?int $id;
     private string $name;
     private string $email;
     private \DateTimeImmutable $created;
@@ -17,8 +17,15 @@ class User
         return $this->id;
     }
 
-    public function setId(int $id): void
+    /**
+     * @throws \Exception
+     */
+    public function setId(?int $id): void
     {
+        if ($this->id !== null) {
+            throw new \Exception('Id redefine is not permitted');
+        }
+
         $this->id = $id;
     }
 

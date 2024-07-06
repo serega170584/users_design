@@ -5,15 +5,19 @@ declare(strict_types=1);
 namespace User;
 
 use User\Dto\User;
+use \User\Entity\User as DbUser;
 use User\EntityManager\EntityManagerInterface;
 use User\Logger\LoggerInterface;
 use User\Repository\UserInterface;
-use User\Validator\UserValidator;
+use User\Validator\CreateUserValidator;
+use User\Validator\UpdateUserValidator;
+use User\Validator\UserValidatorTrait;
 
 class UseCase
 {
     public function __construct(
-        readonly UserValidator          $creatorValidator,
+        readonly CreateUserValidator     $createUserValidator,
+        readonly UpdateUserValidator     $updateUserValidator,
         readonly LoggerInterface        $logger,
         readonly EntityManagerInterface $entityManager,
         readonly UserInterface          $userRepository,
@@ -21,9 +25,9 @@ class UseCase
     ) {}
     public function create(User $user): ?int {
         try {
-            $this->creatorValidator->validate($user);
+            $this->createUserValidator->validate($user);
 
-            $dbUser = $this->userRepository->create($user);
+            $dbUser = $this->createUserEntity($user);
 
             $this->logger->info("Database user create start");
 
@@ -38,4 +42,50 @@ class UseCase
             return null;
         }
     }
+
+    public function update(User $user): bool {
+        try {
+            $this->updateUserValidator->validate($user);
+
+            $dbUser = $this->createUserEntity($user);
+
+            $this->logger->info("Database user update start");
+
+            $this->entityManager->update($dbUser);
+
+            $this->logger->info("Database user create start");
+
+            return true;
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+
+            return false;
+        }
+    }
+
+    private function createUserEntity(User $user): DbUser
+    {
+        $dbUser = new DbUser();
+        $dbUser->setName($user->name);
+        $dbUser->setEmail($user->email);
+        $dbUser->setNotes($user->notes);
+
+        return $dbUser;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function updateUserEntity(User $user): DbUser
+    {
+        $dbUser = new DbUser();
+        $dbUser->setId($user->id);
+        $dbUser->setName($user->name);
+        $dbUser->setEmail($user->email);
+        $dbUser->setNotes($user->notes);
+
+        return $dbUser;
+    }
+
+
 }
