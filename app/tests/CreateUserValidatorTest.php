@@ -7,7 +7,7 @@ namespace Test;
 use PHPUnit\Framework\TestCase;
 use Test\Mock\TestAllowedDomainsStrategy;
 use Test\Mock\TestDeniedWordsStrategy;
-use Test\Mock\TestUserRepository;
+use Test\Mock\TestUserRepositoryRepository;
 use User\Dto\User;
 use User\Exception\EmailDomainIsNotAllowedException;
 use User\Exception\EmailIsNotValidException;
@@ -25,7 +25,7 @@ class CreateUserValidatorTest extends TestCase
     {
         $user = new User(1, '1', '1', '1');
 
-        $repository = new TestUserRepository();
+        $repository = new TestUserRepositoryRepository();
         $deniedWordsStrategy = new TestDeniedWordsStrategy();
         $allowedDomainsStrategy = new TestAllowedDomainsStrategy();
 
@@ -45,7 +45,7 @@ class CreateUserValidatorTest extends TestCase
     {
         $user = new User(null, '1111111111', 'test@test.ru', '1');
 
-        $repository = $this->createMock(TestUserRepository::class);
+        $repository = $this->createMock(TestUserRepositoryRepository::class);
         $repository
             ->expects($this->any())
             ->method('find')
@@ -72,7 +72,7 @@ class CreateUserValidatorTest extends TestCase
     {
         $user = new User(null, '1', '1', '1');
 
-        $repository = new TestUserRepository();
+        $repository = new TestUserRepositoryRepository();
         $deniedWordsStrategy = new TestDeniedWordsStrategy();
         $allowedDomainsStrategy = new TestAllowedDomainsStrategy();
 
@@ -92,7 +92,7 @@ class CreateUserValidatorTest extends TestCase
     {
         $user = new User(null, '1111111111', 'test', '1');
 
-        $repository = $this->createMock(TestUserRepository::class);
+        $repository = $this->createMock(TestUserRepositoryRepository::class);
         $repository
             ->expects($this->any())
             ->method('find')
@@ -120,7 +120,7 @@ class CreateUserValidatorTest extends TestCase
     {
         $user = new User(null, '1111111111', 'test@test.ru', '1');
 
-        $repository = $this->createMock(TestUserRepository::class);
+        $repository = $this->createMock(TestUserRepositoryRepository::class);
         $repository
             ->expects($this->any())
             ->method('find')
@@ -153,7 +153,7 @@ class CreateUserValidatorTest extends TestCase
     {
         $user = new User(null, '1111111111', 'test@test.ru', '1');
 
-        $repository = $this->createMock(TestUserRepository::class);
+        $repository = $this->createMock(TestUserRepositoryRepository::class);
         $repository
             ->expects($this->any())
             ->method('find')

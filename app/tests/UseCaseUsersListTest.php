@@ -11,7 +11,7 @@ use Test\Mock\TestAllowedDomainsStrategy;
 use Test\Mock\TestDeniedWordsStrategy;
 use Test\Mock\TestEntityManager;
 use Test\Mock\TestLogger;
-use Test\Mock\TestUserRepository;
+use Test\Mock\TestUserRepositoryRepository;
 use User\UseCase;
 use User\Validator\CreateUserValidator;
 use User\Validator\DeleteUserValidator;
@@ -25,7 +25,7 @@ class UseCaseUsersListTest extends TestCase
     #[DataProvider('successedUsersListDataProvider')]
     public function testSuccessedUsersList(?array $list)
     {
-        $repository = $this->createMock(TestUserRepository::class);
+        $repository = $this->createMock(TestUserRepositoryRepository::class);
         $repository
             ->expects($this->any())
             ->method('findAll')
@@ -82,7 +82,7 @@ class UseCaseUsersListTest extends TestCase
     #[DataProvider('failedUsersListDataProvider')]
     public function testFailedUsersList(?array $list)
     {
-        $repository = $this->createMock(TestUserRepository::class);
+        $repository = $this->createMock(TestUserRepositoryRepository::class);
         $repository
             ->expects($this->any())
             ->method('findAll')

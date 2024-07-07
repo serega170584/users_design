@@ -11,7 +11,7 @@ use Test\Mock\TestAllowedDomainsStrategy;
 use Test\Mock\TestDeniedWordsStrategy;
 use Test\Mock\TestEntityManager;
 use Test\Mock\TestLogger;
-use Test\Mock\TestUserRepository;
+use Test\Mock\TestUserRepositoryRepository;
 use User\Dto\User;
 use User\Entity\User as DbUser;
 use User\UseCase;
@@ -29,7 +29,7 @@ class UseCaseCreateUserTest extends TestCase
     {
         $user = new User($id,$name, $email, $notes);
 
-        $repository = $this->createMock(TestUserRepository::class);
+        $repository = $this->createMock(TestUserRepositoryRepository::class);
         $repository
             ->expects($this->any())
             ->method('find')
@@ -91,7 +91,7 @@ class UseCaseCreateUserTest extends TestCase
     {
         $user = new User($id,$name, $email, $notes);
 
-        $repository = $this->createMock(TestUserRepository::class);
+        $repository = $this->createMock(TestUserRepositoryRepository::class);
         $dbUser = new DbUser();
         $repository
             ->expects($this->any())
@@ -151,7 +151,7 @@ class UseCaseCreateUserTest extends TestCase
     {
         $user = new User($id,$name, $email, $notes);
 
-        $repository = $this->createMock(TestUserRepository::class);
+        $repository = $this->createMock(TestUserRepositoryRepository::class);
         $dbUser = new DbUser();
         $repository
             ->expects($this->any())
@@ -211,7 +211,7 @@ class UseCaseCreateUserTest extends TestCase
     {
         $user = new User($id, $name, $email, $notes);
 
-        $repository = $this->createMock(TestUserRepository::class);
+        $repository = $this->createMock(TestUserRepositoryRepository::class);
         $repository
             ->expects($this->any())
             ->method('find')
@@ -275,7 +275,7 @@ class UseCaseCreateUserTest extends TestCase
     {
         $user = new User($id, $name, $email, $notes);
 
-        $repository = $this->createMock(TestUserRepository::class);
+        $repository = $this->createMock(TestUserRepositoryRepository::class);
         $repository
             ->expects($this->any())
             ->method('find')

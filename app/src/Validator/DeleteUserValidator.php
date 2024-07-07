@@ -6,14 +6,14 @@ namespace User\Validator;
 
 use User\Entity\User;
 use User\Exception\CreateMoreThenDeleteException;
-use User\Repository\UserInterface;
+use User\Repository\UserRepositoryInterface;
 
 class DeleteUserValidator
 {
-    private UserInterface $userRepository;
+    private UserRepositoryInterface $userRepository;
 
     public function  __construct(
-        UserInterface $userRepository,
+        UserRepositoryInterface $userRepository,
     )
     {
         $this->userRepository = $userRepository;

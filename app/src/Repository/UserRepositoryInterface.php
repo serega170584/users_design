@@ -6,7 +6,7 @@ namespace User\Repository;
 
 use User\Entity\User as DbUser;
 
-interface UserInterface
+interface UserRepositoryInterface
 {
     function findById(int $id): ?DbUser;
 

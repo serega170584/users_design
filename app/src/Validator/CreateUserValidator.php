@@ -6,21 +6,21 @@ namespace User\Validator;
 
 use User\Dto\User;
 use User\Exception\OnlyEmptyIdIsPermittedForCreateException;
-use User\Repository\UserInterface;
+use User\Repository\UserRepositoryInterface;
 
 class CreateUserValidator
 {
     use UserValidatorTrait;
 
-    private UserInterface $userRepository;
+    private UserRepositoryInterface $userRepository;
 
     private DeniedWordsStrategyInterface $deniedWordsStrategy;
 
     private AllowedDomainsStrategyInterface $allowedDomainsStrategy;
 
     public function  __construct(
-        UserInterface $userRepository,
-        DeniedWordsStrategyInterface $deniedWordsStrategy,
+        UserRepositoryInterface         $userRepository,
+        DeniedWordsStrategyInterface    $deniedWordsStrategy,
         AllowedDomainsStrategyInterface $allowedDomainsStrategy
     )
     {

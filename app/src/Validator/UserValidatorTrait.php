@@ -12,7 +12,7 @@ use User\Exception\NameIsNotUniqueException;
 use User\Exception\TooShortNameException;
 use User\Exception\WordIsDeniedException;
 use User\Exception\WrongSymbolsException;
-use User\Repository\UserInterface;
+use User\Repository\UserRepositoryInterface;
 
 trait UserValidatorTrait
 {
@@ -20,9 +20,9 @@ trait UserValidatorTrait
      * @throws \Exception
      */
     public function validateUser(
-        User $user,
-        UserInterface $userRepository,
-        DeniedWordsStrategyInterface $deniedWordsStrategy,
+        User                            $user,
+        UserRepositoryInterface         $userRepository,
+        DeniedWordsStrategyInterface    $deniedWordsStrategy,
         AllowedDomainsStrategyInterface $allowedDomainsStrategy
     ): void
     {

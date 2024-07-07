@@ -12,7 +12,7 @@ use Test\Mock\TestAllowedDomainsStrategy;
 use Test\Mock\TestDeniedWordsStrategy;
 use Test\Mock\TestEntityManager;
 use Test\Mock\TestLogger;
-use Test\Mock\TestUserRepository;
+use Test\Mock\TestUserRepositoryRepository;
 use User\Entity\User;
 use User\UseCase;
 use User\Validator\CreateUserValidator;
@@ -35,7 +35,7 @@ class UseCaseDeleteUserTest extends TestCase
         $user->setId(1);
         $user->setCreated($created);
 
-        $repository = $this->createMock(TestUserRepository::class);
+        $repository = $this->createMock(TestUserRepositoryRepository::class);
         $repository
             ->expects($this->any())
             ->method('findById')
@@ -96,7 +96,7 @@ class UseCaseDeleteUserTest extends TestCase
         $user->setId(1);
         $user->setCreated($created);
 
-        $repository = $this->createMock(TestUserRepository::class);
+        $repository = $this->createMock(TestUserRepositoryRepository::class);
         $repository
             ->expects($this->any())
             ->method('findById')

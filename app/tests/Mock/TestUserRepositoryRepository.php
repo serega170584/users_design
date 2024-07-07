@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Test\Mock;
 
 use User\Entity\User as DbUser;
-use User\Repository\UserInterface;
+use User\Repository\UserRepositoryInterface;
 
-class TestUserRepository implements UserInterface
+class TestUserRepositoryRepository implements UserRepositoryInterface
 {
     function findById(int $id): ?DbUser
     {

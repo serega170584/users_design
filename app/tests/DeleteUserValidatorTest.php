@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace tests;
 
 use PHPUnit\Framework\TestCase;
-use Test\Mock\TestUserRepository;
+use Test\Mock\TestUserRepositoryRepository;
 use User\Entity\User;
 use User\Exception\CreateMoreThenDeleteException;
 use User\Validator\DeleteUserValidator;
@@ -25,7 +25,7 @@ class DeleteUserValidatorTest extends TestCase
         $user->setId(1);
         $user->setCreated($created);
 
-        $repository = $this->createMock(TestUserRepository::class);
+        $repository = $this->createMock(TestUserRepositoryRepository::class);
         $repository
             ->expects($this->any())
             ->method('findById')
@@ -53,7 +53,7 @@ class DeleteUserValidatorTest extends TestCase
         $user->setId(1);
         $user->setCreated($created);
 
-        $repository = $this->createMock(TestUserRepository::class);
+        $repository = $this->createMock(TestUserRepositoryRepository::class);
         $repository
             ->expects($this->any())
             ->method('findById')

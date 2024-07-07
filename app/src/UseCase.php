@@ -8,7 +8,7 @@ use User\Dto\User;
 use User\Entity\User as DbUser;
 use User\EntityManager\EntityManagerInterface;
 use User\Logger\LoggerInterface;
-use User\Repository\UserInterface;
+use User\Repository\UserRepositoryInterface;
 use User\Validator\CreateUserValidator;
 use User\Validator\DeleteUserValidator;
 use User\Validator\UpdateUserValidator;
@@ -28,15 +28,15 @@ class UseCase
     private DeleteUserValidator $deleteUserValidator;
     private LoggerInterface $logger;
     private EntityManagerInterface $entityManager;
-    private UserInterface $userRepository;
+    private UserRepositoryInterface $userRepository;
 
     public function __construct(
         CreateUserValidator     $createUserValidator,
         UpdateUserValidator     $updateUserValidator,
-        DeleteUserValidator $deleteUserValidator,
-        LoggerInterface        $logger,
-        EntityManagerInterface $entityManager,
-        UserInterface          $userRepository,
+        DeleteUserValidator     $deleteUserValidator,
+        LoggerInterface         $logger,
+        EntityManagerInterface  $entityManager,
+        UserRepositoryInterface $userRepository,
     ) {
         $this->createUserValidator = $createUserValidator;
         $this->updateUserValidator = $updateUserValidator;
