@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test;
 
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Test\Mock\TestAllowedDomainsStrategy;
 use Test\Mock\TestDeniedWordsStrategy;
