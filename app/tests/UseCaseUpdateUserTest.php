@@ -18,13 +18,13 @@ use User\Validator\CreateUserValidator;
 use User\Validator\DeleteUserValidator;
 use User\Validator\UpdateUserValidator;
 
-class UseCaseTest extends TestCase
+class UseCaseUpdateUserTest extends TestCase
 {
     /**
      * @throws Exception
      */
-    #[DataProvider('createUniqueUserDataProvider')]
-    public function testCreateUniqueUser(?int $id, string $name, string $email, string $notes, ?int $createdId)
+    #[DataProvider('updateUniqueUserDataProvider')]
+    public function testUpdateUniqueUser(?int $id, string $name, string $email, string $notes, bool $isUpdated)
     {
         $user = new User($id,$name, $email, $notes);
 
@@ -33,8 +33,15 @@ class UseCaseTest extends TestCase
             ->expects($this->any())
             ->method('find')
             ->willReturnOnConsecutiveCalls(
-        null,
                 null,
+                null,
+            );
+
+        $repository
+            ->expects($this->any())
+            ->method('findById')
+            ->willReturnOnConsecutiveCalls(
+                new DbUser(),
             );
 
         $deniedWordsStrategy = new TestDeniedWordsStrategy();
@@ -69,24 +76,24 @@ class UseCaseTest extends TestCase
             $repository,
         );
 
-        $this->assertEquals($createdId, $useCase->create($user));
+        $this->assertEquals($isUpdated, $useCase->update($user));
     }
 
-    public static function createUniqueUserDataProvider(): array
+    public static function updateUniqueUserDataProvider(): array
     {
         return [
-            [1, 'name', 'test@test.ru', '1', null],
-            [null, 'name', 'test@test.ru', '1', null],
-            [null, 'namename', 'test', '1', null],
-            [null, 'namename', 'test@test.ru', '1', 1],
+            [null, 'name', 'test@test.ru', '1', false],
+            [1, 'name', 'test@test.ru', '1', false],
+            [1, 'namename', 'test', '1', false],
+            [1, 'namename', 'test@test.ru', '1', true],
         ];
     }
 
     /**
      * @throws Exception
      */
-    #[DataProvider('createNotUniqueUserNameDataProvider')]
-    public function testCreateNotUniqueUserName(?int $id, string $name, string $email, string $notes, ?int $createdId)
+    #[DataProvider('updateNotUniqueUserNameDataProvider')]
+    public function testUpdateNotUniqueUserName(int $id, string $name, string $email, string $notes, bool $isUpdated)
     {
         $user = new User($id,$name, $email, $notes);
 
@@ -132,21 +139,21 @@ class UseCaseTest extends TestCase
             $repository,
         );
 
-        $this->assertEquals($createdId, $useCase->create($user));
+        $this->assertEquals($isUpdated, $useCase->update($user));
     }
 
-    public static function createNotUniqueUserNameDataProvider(): array
+    public static function updateNotUniqueUserNameDataProvider(): array
     {
         return [
-            [null, 'namename', 'test@test.ru', '1', null],
+            [1, 'namename', 'test@test.ru', '1', false],
         ];
     }
 
     /**
      * @throws Exception
      */
-    #[DataProvider('createNotUniqueUserEmailDataProvider')]
-    public function testCreateNotUniqueUserEmail(?int $id, string $name, string $email, string $notes, ?int $createdId)
+    #[DataProvider('updateNotUniqueUserEmailDataProvider')]
+    public function testUpdateNotUniqueUserEmail(int $id, string $name, string $email, string $notes, bool $isUpdated)
     {
         $user = new User($id,$name, $email, $notes);
 
@@ -192,21 +199,21 @@ class UseCaseTest extends TestCase
             $repository,
         );
 
-        $this->assertEquals($createdId, $useCase->create($user));
+        $this->assertEquals($isUpdated, $useCase->update($user));
     }
 
-    public static function createNotUniqueUserEmailDataProvider(): array
+    public static function updateNotUniqueUserEmailDataProvider(): array
     {
         return [
-            [null, 'namename', 'test@test.ru', '1', null],
+            [1, 'namename', 'test@test.ru', '1', false],
         ];
     }
 
     /**
      * @throws Exception
      */
-    #[DataProvider('createDeniedWordsUserDataProvider')]
-    public function testCreateDeniedWordsUser(?int $id, string $name, string $email, string $notes, ?int $createdId)
+    #[DataProvider('updateDeniedWordsUserDataProvider')]
+    public function testUpdateDeniedWordsUser(int $id, string $name, string $email, string $notes, bool $isUpdated)
     {
         $user = new User($id, $name, $email, $notes);
 
@@ -256,21 +263,21 @@ class UseCaseTest extends TestCase
             $repository,
         );
 
-        $this->assertEquals($createdId, $useCase->create($user));
+        $this->assertEquals($isUpdated, $useCase->update($user));
     }
 
-    public static function createDeniedWordsUserDataProvider(): array
+    public static function updateDeniedWordsUserDataProvider(): array
     {
         return [
-            [null, 'namename', 'test@test.ru', '1', null],
+            [1, 'namename', 'test@test.ru', '1', false],
         ];
     }
 
     /**
      * @throws Exception
      */
-    #[DataProvider('createAllowedDomainsUserDataProvider')]
-    public function testCreateAllowedDomainsUser(?int $id, string $name, string $email, string $notes, ?int $createdId)
+    #[DataProvider('updateAllowedDomainsUserDataProvider')]
+    public function testUpdateAllowedDomainsUser(int $id, string $name, string $email, string $notes, bool $isUpdated)
     {
         $user = new User($id, $name, $email, $notes);
 
@@ -320,13 +327,13 @@ class UseCaseTest extends TestCase
             $repository,
         );
 
-        $this->assertEquals($createdId, $useCase->create($user));
+        $this->assertEquals($isUpdated, $useCase->update($user));
     }
 
-    public static function createAllowedDomainsUserDataProvider(): array
+    public static function updateAllowedDomainsUserDataProvider(): array
     {
         return [
-            [null, 'namename', 'test@test.ru', '1', null],
+            [1, 'namename', 'test@test.ru', '1', false],
         ];
     }
 }
