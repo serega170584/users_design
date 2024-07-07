@@ -7,6 +7,7 @@ namespace User;
 use User\Dto\User;
 use User\Entity\User as DbUser;
 use User\EntityManager\EntityManagerInterface;
+use User\Exception\UserIsNotExistedException;
 use User\Logger\LoggerInterface;
 use User\Repository\UserRepositoryInterface;
 use User\Validator\CreateUserValidator;
@@ -98,6 +99,10 @@ class UseCase
             $date = new \DateTimeImmutable();
 
             $dbUser = $this->userRepository->findById($id);
+
+            if ($dbUser === null) {
+                throw new UserIsNotExistedException();
+            }
 
             $this->deleteUserValidator->validate($dbUser, $date);
 
