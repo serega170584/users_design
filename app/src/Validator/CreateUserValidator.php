@@ -32,7 +32,7 @@ class CreateUserValidator
     /**
      * @throws \Exception
      */
-    public function validate(User $user): void
+    public function validate(User $user): bool
     {
         if ($user->id !== null) {
             throw new OnlyEmptyIdIsPermittedForCreateException();
@@ -44,6 +44,8 @@ class CreateUserValidator
             $this->deniedWordsStrategy,
             $this->allowedDomainsStrategy,
         );
+
+        return true;
     }
 
 }

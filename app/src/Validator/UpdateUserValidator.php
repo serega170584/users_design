@@ -33,7 +33,7 @@ class UpdateUserValidator
     /**
      * @throws \Exception
      */
-    public function validate(User $user): void
+    public function validate(User $user): bool
     {
         if ($user->id === null) {
             throw new OnlyNotEmptyIdIsPermittedForUpdateException();
@@ -49,6 +49,8 @@ class UpdateUserValidator
             $this->deniedWordsStrategy,
             $this->allowedDomainsStrategy,
         );
+
+        return true;
     }
 
 }

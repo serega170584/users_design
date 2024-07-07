@@ -12,12 +12,12 @@ use User\Dto\User;
 use User\Exception\OnlyEmptyIdIsPermittedForCreateException;
 use User\Validator\CreateUserValidator;
 
-class ValidatorTest extends TestCase
+class CreateUserValidatorTest extends TestCase
 {
     /**
      * @throws \Exception
      */
-    public function testCreate(): void
+    public function testFailedCreate(): void
     {
         $user = new User(1, '1', '1', '1');
 
@@ -32,5 +32,32 @@ class ValidatorTest extends TestCase
         );
         $this->expectExceptionObject(new OnlyEmptyIdIsPermittedForCreateException);
         $validator->validate($user);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSuccessedCreate(): void
+    {
+        $user = new User(null, '1111111111', 'test@test.ru', '1');
+
+        $repository = $this->createMock(TestUserRepository::class);
+        $repository
+            ->expects($this->any())
+            ->method('find')
+            ->willReturnOnConsecutiveCalls(
+                null,
+            );
+
+        $deniedWordsStrategy = new TestDeniedWordsStrategy();
+        $allowedDomainsStrategy = new TestAllowedDomainsStrategy();
+
+        $validator = new CreateUserValidator(
+            $repository,
+            $deniedWordsStrategy,
+            $allowedDomainsStrategy,
+        );
+
+        $this->assertTrue($validator->validate($user));
     }
 }

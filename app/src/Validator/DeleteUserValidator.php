@@ -22,10 +22,12 @@ class DeleteUserValidator
     /**
      * @throws \Exception
      */
-    public function validate(User $user, \DateTimeImmutable $delete): void
+    public function validate(User $user, \DateTimeImmutable $delete): bool
     {
         if ($delete < $user->getCreated()) {
             throw new CreateMoreThenDeleteException();
         }
+
+        return true;
     }
 }
