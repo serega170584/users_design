@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace User;
+namespace Test;
 
 use DateInterval;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -14,6 +14,7 @@ use Test\Mock\TestEntityManager;
 use Test\Mock\TestLogger;
 use Test\Mock\TestUserRepository;
 use User\Entity\User;
+use User\UseCase;
 use User\Validator\CreateUserValidator;
 use User\Validator\DeleteUserValidator;
 use User\Validator\UpdateUserValidator;

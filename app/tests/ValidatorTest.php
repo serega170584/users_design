@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace User;
+namespace Test;
 
 use PHPUnit\Framework\TestCase;
 use Test\Mock\TestAllowedDomainsStrategy;

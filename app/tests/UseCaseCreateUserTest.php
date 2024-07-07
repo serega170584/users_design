@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace User;
+namespace Test;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
@@ -14,6 +14,7 @@ use Test\Mock\TestLogger;
 use Test\Mock\TestUserRepository;
 use User\Dto\User;
 use User\Entity\User as DbUser;
+use User\UseCase;
 use User\Validator\CreateUserValidator;
 use User\Validator\DeleteUserValidator;
 use User\Validator\UpdateUserValidator;
