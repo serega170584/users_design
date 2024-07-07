@@ -99,9 +99,9 @@ class UseCase
 
             $dbUser = $this->userRepository->findById($id);
 
-            $this->deleteUserValidator->validate($id, $date);
+            $this->deleteUserValidator->validate($dbUser, $date);
 
-            $dbUser->setDeleted(new \DateTimeImmutable());
+            $dbUser->setDeleted($date);
 
             $this->logger->info(sprintf('[%s] database user delete start', self::USER_DELETE_MARK));
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace User\Validator;
 
+use User\Entity\User;
 use User\Exception\CreateMoreThenDeleteException;
 use User\Repository\UserInterface;
 
@@ -21,11 +22,9 @@ class DeleteUserValidator
     /**
      * @throws \Exception
      */
-    public function validate(int $id, \DateTimeImmutable $delete): void
+    public function validate(User $user, \DateTimeImmutable $delete): void
     {
-        $dbUser = $this->userRepository->findById($id);
-
-        if ($delete < $dbUser->getCreated()) {
+        if ($delete < $user->getCreated()) {
             throw new CreateMoreThenDeleteException();
         }
     }

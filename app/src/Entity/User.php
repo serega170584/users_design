@@ -67,9 +67,6 @@ class User
         return $this->deleted;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function setDeleted(?\DateTimeImmutable $deleted): void
     {
         $this->deleted = $deleted;
