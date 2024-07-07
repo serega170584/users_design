@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use Tests\TestAllowedDomainsStrategy;
-use Tests\TestDeniedWordsStrategy;
-use Tests\TestUserRepository;
+use Test\Mock\TestAllowedDomainsStrategy;
+use Test\Mock\TestDeniedWordsStrategy;
+use Test\Mock\TestUserRepository;
 use User\Dto\User;
 use User\Exception\OnlyEmptyIdIsPermittedForCreateException;
 use User\Validator\CreateUserValidator;

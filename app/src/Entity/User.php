@@ -15,7 +15,7 @@ class User
     private ?\DateTimeImmutable $deleted;
     private ?string $notes;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -25,9 +25,9 @@ class User
      */
     public function setId(?int $id): void
     {
-        if ($this->id !== null) {
-            throw new IdRedefineIsNotPermittedException();
-        }
+//        if ($this->id !== null) {
+//            throw new IdRedefineIsNotPermittedException();
+//        }
 
         $this->id = $id;
     }

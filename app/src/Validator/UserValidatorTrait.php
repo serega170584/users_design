@@ -47,7 +47,7 @@ trait UserValidatorTrait
             throw new NameIsNotUniqueException();
         }
 
-        if (filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
             throw new EmailIsNotValidException();
         }
 

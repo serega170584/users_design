@@ -54,7 +54,7 @@ class UseCase
 
             $this->logger->info(sprintf('[%s] database user create start', self::USER_CREATE_MARK));
 
-            $this->entityManager->update($dbUser);
+            $this->entityManager->create($dbUser);
 
             $this->logger->info(sprintf('[%s] database user create finish', self::USER_CREATE_MARK));
 
