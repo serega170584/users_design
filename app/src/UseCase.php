@@ -59,7 +59,8 @@ class UseCase
             $this->logger->info(sprintf('[%s] database user create finish', self::USER_CREATE_MARK));
 
             return $dbUser->getId();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            var_dump($e->getMessage());
             $this->logger->error(sprintf('[%s]', self::USER_CREATE_MARK), [
                 self::EXCEPTION_PARAM_NAME => $e,
             ]);
