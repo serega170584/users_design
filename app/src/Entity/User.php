@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace User\Entity;
 
-use User\Exception\IdRedefineIsNotPermittedException;
-
 class User
 {
     private ?int $id;

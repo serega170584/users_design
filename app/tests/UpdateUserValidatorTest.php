@@ -15,7 +15,6 @@ use User\Exception\EmailIsNotValidException;
 use User\Exception\OnlyNotEmptyIdIsPermittedForUpdateException;
 use User\Exception\TooShortNameException;
 use User\Exception\WordIsDeniedException;
-use User\Validator\CreateUserValidator;
 use User\Validator\UpdateUserValidator;
 
 class UpdateUserValidatorTest extends TestCase

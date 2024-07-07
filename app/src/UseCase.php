@@ -61,7 +61,6 @@ class UseCase
 
             return $dbUser->getId();
         } catch (\Throwable $e) {
-            var_dump($e->getMessage());
             $this->logger->error(sprintf('[%s]', self::USER_CREATE_MARK), [
                 self::EXCEPTION_PARAM_NAME => $e,
             ]);
