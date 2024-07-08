@@ -16,6 +16,8 @@ use User\Repository\UserRepositoryInterface;
 
 trait UserValidatorTrait
 {
+    private const NAME_MIN_LENGTH = 8;
+    private const VALID_NAME_PATTERN = '#^[a-z0-9]+$#';
     /**
      * @throws \Exception
      */
@@ -26,11 +28,11 @@ trait UserValidatorTrait
         AllowedDomainsStrategyInterface $allowedDomainsStrategy
     ): void
     {
-        if (!preg_match("#^[a-z0-9]+$#", $user->name)) {
+        if (!preg_match(self::VALID_NAME_PATTERN, $user->name)) {
             throw new WrongSymbolsException();
         }
 
-        if (strlen($user->name) < 8) {
+        if (strlen($user->name) < self::NAME_MIN_LENGTH) {
             throw new TooShortNameException();
         }
 
