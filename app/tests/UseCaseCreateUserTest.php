@@ -14,6 +14,7 @@ use Test\Mock\TestLogger;
 use Test\Mock\TestUserRepositoryRepository;
 use User\Dto\User;
 use User\Entity\User as DbUser;
+use User\Exception\DbFindException;
 use User\Exception\DbSaveException;
 use User\UseCase;
 use User\Validator\CreateUserValidator;
@@ -61,6 +62,51 @@ class UseCaseCreateUserTest extends TestCase
             ->expects($this->any())
             ->method('create')
             ->willThrowException(new DbSaveException());
+
+        $useCase = new UseCase(
+            $createUserValidator,
+            $updateUserValidator,
+            $deleteUserValidator,
+            $logger,
+            $em,
+            $repository,
+        );
+
+        $this->assertNull($useCase->create($user));
+    }
+
+    public function testDbFindErrorCreateUser()
+    {
+        $user = new User(null,'asdasdasdasd', 'test@test.ru', null);
+
+        $repository = $this->createMock(TestUserRepositoryRepository::class);
+        $repository
+            ->expects($this->any())
+            ->method('find')
+            ->willThrowException(new DbFindException());
+
+        $deniedWordsStrategy = new TestDeniedWordsStrategy();
+        $allowedDomainsStrategy = new TestAllowedDomainsStrategy();
+
+        $createUserValidator = new CreateUserValidator(
+            $repository,
+            $deniedWordsStrategy,
+            $allowedDomainsStrategy,
+        );
+
+        $updateUserValidator = new UpdateUserValidator(
+            $repository,
+            $deniedWordsStrategy,
+            $allowedDomainsStrategy,
+        );
+
+        $deleteUserValidator = new DeleteUserValidator(
+            $repository,
+        );
+
+        $logger = new TestLogger();
+
+        $em = new TestEntityManager();
 
         $useCase = new UseCase(
             $createUserValidator,
