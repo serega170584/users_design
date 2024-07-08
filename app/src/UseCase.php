@@ -51,7 +51,7 @@ final class UseCase
 
             $this->createUserValidator->validate($user);
 
-            $dbUser = $this->createUserEntity($user);
+            $dbUser = $this->getCreatedUserEntity($user);
 
             $this->logger->info(sprintf('[%s] database user create start', self::USER_CREATE_MARK));
 
@@ -73,7 +73,7 @@ final class UseCase
         try {
             $this->updateUserValidator->validate($user);
 
-            $dbUser = $this->updateUserEntity($user);
+            $dbUser = $this->getUpdatedUserEntity($user);
 
             $this->logger->info(sprintf('[%s] database user update start', self::USER_UPDATE_MARK));
 
@@ -157,7 +157,7 @@ final class UseCase
         return $users;
     }
 
-    private function createUserEntity(User $user): DbUser
+    private function getCreatedUserEntity(User $user): DbUser
     {
         $dbUser = new DbUser();
         $dbUser->setName($user->name);
@@ -170,7 +170,7 @@ final class UseCase
     /**
      * @throws \Exception
      */
-    private function updateUserEntity(User $user): DbUser
+    private function getUpdatedUserEntity(User $user): DbUser
     {
         $dbUser = new DbUser();
         $dbUser->setId($user->id);
