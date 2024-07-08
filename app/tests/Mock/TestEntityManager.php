@@ -10,10 +10,6 @@ use User\EntityManager\EntityManagerInterface;
 class TestEntityManager implements EntityManagerInterface
 {
     private int $lastId = 0;
-    /**
-     * @var User[]
-     */
-    private array $list = [];
 
     /**
      * @throws \Exception

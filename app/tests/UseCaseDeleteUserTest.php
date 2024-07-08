@@ -14,6 +14,7 @@ use Test\Mock\TestEntityManager;
 use Test\Mock\TestLogger;
 use Test\Mock\TestUserRepositoryRepository;
 use User\Entity\User;
+use User\Exception\DbSaveException;
 use User\UseCase;
 use User\Validator\CreateUserValidator;
 use User\Validator\DeleteUserValidator;
@@ -21,6 +22,63 @@ use User\Validator\UpdateUserValidator;
 
 class UseCaseDeleteUserTest extends TestCase
 {
+    public function testDbSaveErrorDeleteUser()
+    {
+        $interval = new DateInterval('P2Y4DT6H8M');
+        $interval->format('1 days');
+        $created = (new \DateTimeImmutable())->sub($interval);
+
+        $user = new User();
+        $user->setId(1);
+        $user->setCreated($created);
+
+        $repository = $this->createMock(TestUserRepositoryRepository::class);
+        $repository
+            ->expects($this->any())
+            ->method('findById')
+            ->willReturnOnConsecutiveCalls(
+                $user,
+            );
+
+        $deniedWordsStrategy = new TestDeniedWordsStrategy();
+        $allowedDomainsStrategy = new TestAllowedDomainsStrategy();
+
+        $createUserValidator = new CreateUserValidator(
+            $repository,
+            $deniedWordsStrategy,
+            $allowedDomainsStrategy,
+        );
+
+        $updateUserValidator = new UpdateUserValidator(
+            $repository,
+            $deniedWordsStrategy,
+            $allowedDomainsStrategy,
+        );
+
+        $deleteUserValidator = new DeleteUserValidator(
+            $repository,
+        );
+
+        $logger = new TestLogger();
+
+        $em = $this->createMock(TestEntityManager::class);
+        $em
+            ->expects($this->any())
+            ->method('update')
+            ->willThrowException(new DbSaveException());
+
+        $useCase = new UseCase(
+            $createUserValidator,
+            $updateUserValidator,
+            $deleteUserValidator,
+            $logger,
+            $em,
+            $repository,
+        );
+
+        $this->assertFalse($useCase->delete(1));
+    }
+
     /**
      * @throws Exception
      */
@@ -32,7 +90,7 @@ class UseCaseDeleteUserTest extends TestCase
         $created = (new \DateTimeImmutable())->sub($interval);
 
         $user = new User();
-        $user->setId(1);
+        $user->setId($id);
         $user->setCreated($created);
 
         $repository = $this->createMock(TestUserRepositoryRepository::class);
@@ -93,7 +151,7 @@ class UseCaseDeleteUserTest extends TestCase
         $created = (new \DateTimeImmutable())->add($interval);
 
         $user = new User();
-        $user->setId(1);
+        $user->setId($id);
         $user->setCreated($created);
 
         $repository = $this->createMock(TestUserRepositoryRepository::class);

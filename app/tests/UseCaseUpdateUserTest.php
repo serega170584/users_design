@@ -14,6 +14,7 @@ use Test\Mock\TestLogger;
 use Test\Mock\TestUserRepositoryRepository;
 use User\Dto\User;
 use User\Entity\User as DbUser;
+use User\Exception\DbSaveException;
 use User\UseCase;
 use User\Validator\CreateUserValidator;
 use User\Validator\DeleteUserValidator;
@@ -21,11 +22,70 @@ use User\Validator\UpdateUserValidator;
 
 class UseCaseUpdateUserTest extends TestCase
 {
+    public function testDbSaveErrorUpdateUser()
+    {
+        $user = new User(1,'asdasdasdasdasd', 'test@test.ru', 'qqweqw');
+
+        $repository = $this->createMock(TestUserRepositoryRepository::class);
+        $repository
+            ->expects($this->any())
+            ->method('find')
+            ->willReturnOnConsecutiveCalls(
+                null,
+                null,
+            );
+
+        $repository
+            ->expects($this->any())
+            ->method('findById')
+            ->willReturnOnConsecutiveCalls(
+                new DbUser(),
+            );
+
+        $deniedWordsStrategy = new TestDeniedWordsStrategy();
+        $allowedDomainsStrategy = new TestAllowedDomainsStrategy();
+
+        $createUserValidator = new CreateUserValidator(
+            $repository,
+            $deniedWordsStrategy,
+            $allowedDomainsStrategy,
+        );
+
+        $updateUserValidator = new UpdateUserValidator(
+            $repository,
+            $deniedWordsStrategy,
+            $allowedDomainsStrategy,
+        );
+
+        $deleteUserValidator = new DeleteUserValidator(
+            $repository,
+        );
+
+        $logger = new TestLogger();
+
+        $em = $this->createMock(TestEntityManager::class);
+        $em
+            ->expects($this->any())
+            ->method('update')
+            ->willThrowException(new DbSaveException());
+
+        $useCase = new UseCase(
+            $createUserValidator,
+            $updateUserValidator,
+            $deleteUserValidator,
+            $logger,
+            $em,
+            $repository,
+        );
+
+        $this->assertFalse($useCase->update($user));
+    }
+
     /**
      * @throws Exception
      */
-    #[DataProvider('successedUpdateUserDataProvider')]
-    public function testSuccessedUpdateUser(?int $id, string $name, string $email, string $notes, bool $isUpdated)
+    #[DataProvider('updateUniqueUserUserDataProvider')]
+    public function testUpdateUniqueUser(?int $id, string $name, string $email, string $notes, bool $isUpdated)
     {
         $user = new User($id,$name, $email, $notes);
 
@@ -80,7 +140,7 @@ class UseCaseUpdateUserTest extends TestCase
         $this->assertEquals($isUpdated, $useCase->update($user));
     }
 
-    public static function successedUpdateUserDataProvider(): array
+    public static function updateUniqueUserUserDataProvider(): array
     {
         return [
             [null, 'name', 'test@test.ru', '1', false],
