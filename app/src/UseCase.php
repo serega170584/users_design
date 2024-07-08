@@ -14,7 +14,7 @@ use User\Validator\CreateUserValidator;
 use User\Validator\DeleteUserValidator;
 use User\Validator\UpdateUserValidator;
 
-class UseCase
+final class UseCase
 {
     private const USER_CREATE_MARK = 'User create';
     private const USER_UPDATE_MARK = 'User update';

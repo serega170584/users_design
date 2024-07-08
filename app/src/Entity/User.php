@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace User\Entity;
 
-class User
+final class User
 {
     private ?int $id;
     private string $name;

@@ -8,7 +8,7 @@ use User\Entity\User;
 use User\Exception\CreateMoreThenDeleteException;
 use User\Repository\UserRepositoryInterface;
 
-class DeleteUserValidator
+final class DeleteUserValidator
 {
     private UserRepositoryInterface $userRepository;
 

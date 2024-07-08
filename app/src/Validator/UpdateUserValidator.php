@@ -9,7 +9,7 @@ use User\Exception\OnlyNotEmptyIdIsPermittedForUpdateException;
 use User\Exception\UserIsNotExistedException;
 use User\Repository\UserRepositoryInterface;
 
-class UpdateUserValidator
+final class UpdateUserValidator
 {
     use UserValidatorTrait;
 

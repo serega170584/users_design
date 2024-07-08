@@ -8,7 +8,7 @@ use User\Dto\User;
 use User\Exception\OnlyEmptyIdIsPermittedForCreateException;
 use User\Repository\UserRepositoryInterface;
 
-class CreateUserValidator
+final class CreateUserValidator
 {
     use UserValidatorTrait;
 
