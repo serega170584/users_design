@@ -24,8 +24,8 @@ class UseCaseUpdateUserTest extends TestCase
     /**
      * @throws Exception
      */
-    #[DataProvider('updateUniqueUserDataProvider')]
-    public function testUpdateUniqueUser(?int $id, string $name, string $email, string $notes, bool $isUpdated)
+    #[DataProvider('successedUpdateUserDataProvider')]
+    public function testSuccessedUpdateUser(?int $id, string $name, string $email, string $notes, bool $isUpdated)
     {
         $user = new User($id,$name, $email, $notes);
 
@@ -80,13 +80,79 @@ class UseCaseUpdateUserTest extends TestCase
         $this->assertEquals($isUpdated, $useCase->update($user));
     }
 
-    public static function updateUniqueUserDataProvider(): array
+    public static function successedUpdateUserDataProvider(): array
     {
         return [
             [null, 'name', 'test@test.ru', '1', false],
             [1, 'name', 'test@test.ru', '1', false],
             [1, 'namename', 'test', '1', false],
             [1, 'namename', 'test@test.ru', '1', true],
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[DataProvider('updateInvalidUserDataProvider')]
+    public function testUpdateInvalidUser(?int $id, string $name, string $email, string $notes, bool $isUpdated)
+    {
+        $user = new User($id,$name, $email, $notes);
+
+        $repository = $this->createMock(TestUserRepositoryRepository::class);
+        $repository
+            ->expects($this->any())
+            ->method('find')
+            ->willReturnOnConsecutiveCalls(
+                null,
+                null,
+            );
+
+        $repository
+            ->expects($this->any())
+            ->method('findById')
+            ->willReturnOnConsecutiveCalls(
+                null,
+            );
+
+        $deniedWordsStrategy = new TestDeniedWordsStrategy();
+        $allowedDomainsStrategy = new TestAllowedDomainsStrategy();
+
+        $createUserValidator = new CreateUserValidator(
+            $repository,
+            $deniedWordsStrategy,
+            $allowedDomainsStrategy,
+        );
+
+        $updateUserValidator = new UpdateUserValidator(
+            $repository,
+            $deniedWordsStrategy,
+            $allowedDomainsStrategy,
+        );
+
+        $deleteUserValidator = new DeleteUserValidator(
+            $repository,
+        );
+
+        $logger = new TestLogger();
+
+        $em = new TestEntityManager();
+
+        $useCase = new UseCase(
+            $createUserValidator,
+            $updateUserValidator,
+            $deleteUserValidator,
+            $logger,
+            $em,
+            $repository,
+        );
+
+        $this->assertEquals($isUpdated, $useCase->update($user));
+    }
+
+    public static function updateInvalidUserDataProvider(): array
+    {
+        return [
+            [1, 'name', 'test@test.ru', '1', false],
         ];
     }
 

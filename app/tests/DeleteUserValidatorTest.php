@@ -15,7 +15,7 @@ class DeleteUserValidatorTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testFailedUpdate(): void
+    public function testFailedDelete(): void
     {
         $interval = new \DateInterval('P2Y4DT6H8M');
         $interval->format('1 days');
@@ -43,7 +43,7 @@ class DeleteUserValidatorTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testSuccessedUpdate(): void
+    public function testSuccessedDelete(): void
     {
         $interval = new \DateInterval('P2Y4DT6H8M');
         $interval->format('1 days');

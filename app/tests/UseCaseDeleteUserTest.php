@@ -85,8 +85,8 @@ class UseCaseDeleteUserTest extends TestCase
         ];
     }
 
-    #[DataProvider('failedDeleteUserDataProvider')]
-    public function testFailedDeleteUser(int $id, bool $isDeleted)
+    #[DataProvider('failedDeleteDateUserDataProvider')]
+    public function testFailedDeleteDateDeleteUser(int $id, bool $isDeleted)
     {
         $interval = new DateInterval('P2Y4DT6H8M');
         $interval->format('1 days');
@@ -139,7 +139,60 @@ class UseCaseDeleteUserTest extends TestCase
         $this->assertEquals($isDeleted, $useCase->delete($id));
     }
 
-    public static function failedDeleteUserDataProvider(): array
+    public static function failedDeleteDateUserDataProvider(): array
+    {
+        return [
+            [1, false],
+        ];
+    }
+
+    #[DataProvider('failedUserDeleteUserDataProvider')]
+    public function testFailedUserDeleteUser(int $id, bool $isDeleted)
+    {
+        $repository = $this->createMock(TestUserRepositoryRepository::class);
+        $repository
+            ->expects($this->any())
+            ->method('findById')
+            ->willReturnOnConsecutiveCalls(
+                null,
+            );
+
+        $deniedWordsStrategy = new TestDeniedWordsStrategy();
+        $allowedDomainsStrategy = new TestAllowedDomainsStrategy();
+
+        $createUserValidator = new CreateUserValidator(
+            $repository,
+            $deniedWordsStrategy,
+            $allowedDomainsStrategy,
+        );
+
+        $updateUserValidator = new UpdateUserValidator(
+            $repository,
+            $deniedWordsStrategy,
+            $allowedDomainsStrategy,
+        );
+
+        $deleteUserValidator = new DeleteUserValidator(
+            $repository,
+        );
+
+        $logger = new TestLogger();
+
+        $em = new TestEntityManager();
+
+        $useCase = new UseCase(
+            $createUserValidator,
+            $updateUserValidator,
+            $deleteUserValidator,
+            $logger,
+            $em,
+            $repository,
+        );
+
+        $this->assertEquals($isDeleted, $useCase->delete($id));
+    }
+
+    public static function failedUserDeleteUserDataProvider(): array
     {
         return [
             [1, false],
